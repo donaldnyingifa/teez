@@ -1,0 +1,22 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "knex": "^0.19.0",
+    "mysql2": "^1.6.5",
+    "nodemon": "^1.17.3",
+    "pg": "^7.11.0",
+    "sequelize": "^5.10.1"
+  }
+}
