@@ -1,11 +1,14 @@
 const Product = require('../models/product');
 
 exports.getAddProduct = (req, res, next) => {
-    // res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
+    if (!req.session.isLoggedIn) {
+        return res.redirect('/login');
+    }
     res.render('admin/edit-product', { 
         pageTitle: 'Add Product', 
         path: '/admin/add-product', 
-        editing: false
+        editing: false,
+        isAuthenticated: req.session.isLoggedIn
      });
  };
 
@@ -47,7 +50,9 @@ exports.getEditProduct = (req, res, next) => {
             pageTitle: 'Edit Product', 
             path: '/admin/edit -product', 
             editing: editMode,
-            product: product
+            product: product,
+            isAuthenticated: req.session.isLoggedIn,
+
          });
     }).catch(err => console.log(err));
        
@@ -61,7 +66,7 @@ exports.getEditProduct = (req, res, next) => {
      const updatedDesc  = req.body.description;
      Product.findAll({where: {id: prodId}})
      .then(([product]) => {
-         console.log('hey')
+        // console.log('hey')
         product.title = updatedTitle,
         product.imageurl = updatedImageUrl,
         product.price = updatedPrice,
@@ -69,7 +74,7 @@ exports.getEditProduct = (req, res, next) => {
         return product.save();
      })
      .then(result => {
-         console.log('Updated Product')
+        // console.log('Updated Product')
          res.redirect('/admin/products');
      })
      .catch(err => console.log(err));
@@ -83,7 +88,8 @@ exports.getProducts = (req, res, next) => {
         res.render('admin/products', {
             prods: products,
             pageTitle: 'Admin Products',
-            path: '/admin/products'
+            path: '/admin/products',
+            isAuthenticated: req.session.isLoggedIn
         });
     })
     .catch(err => console.log(err));
