@@ -54,8 +54,7 @@ exports.getEditProduct = (req, res, next) => {
             isAuthenticated: req.session.isLoggedIn,
 
          });
-    }).catch(err => console.log(err));
-       
+    }).catch(err => console.log(err));   
  };
 
  exports.postEditProduct = (req, res, next) => {
@@ -66,24 +65,27 @@ exports.getEditProduct = (req, res, next) => {
      const updatedDesc  = req.body.description;
      Product.findAll({where: {id: prodId}})
      .then(([product]) => {
-        // console.log('hey')
+         if (product.userId !== req.user.id) {
+             return res.redirect('/');
+         }
+        // console.log('s-----',product)
         product.title = updatedTitle,
         product.imageurl = updatedImageUrl,
         product.price = updatedPrice,
         product.description = updatedDesc 
-        return product.save();
-     })
-     .then(result => {
-        // console.log('Updated Product')
-         res.redirect('/admin/products');
+        return product.save().then(result => {
+            // console.log('Updated Product')
+             res.redirect('/admin/products');
+         })
      })
      .catch(err => console.log(err));
      
  };
 
 exports.getProducts = (req, res, next) => {
-    req.user
-    .getProducts()
+    // req.user
+    // .getProducts()
+    Product.findAll({where: {userId: req.user.id}})
     .then((products) => {
         res.render('admin/products', {
             prods: products,
@@ -98,7 +100,7 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
     const productId = req.body.productId;
-    Product.findAll({where: {id: productId}})
+    Product.findAll({where: {id: productId, userId: req.user.id}})
     .then(([product]) => {
         return product.destroy();
     })
