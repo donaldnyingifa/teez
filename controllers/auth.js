@@ -11,7 +11,7 @@ const sendgridTransport = require('nodemailer-sendgrid-transport');
 const saltRounds = 10;
 const transporter = nodemailer.createTransport(sendgridTransport({
   auth: {
-    api_key: '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'
+    api_key: ''
   }
 }));
 
